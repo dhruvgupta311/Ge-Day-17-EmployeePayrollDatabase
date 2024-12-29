@@ -2,6 +2,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.sql.ResultSet;
 
 public class EmployeePayrollTable {
     private static final String URL = "jdbc:mysql://localhost:3306/payroll_service";
@@ -22,18 +23,21 @@ public class EmployeePayrollTable {
             statement.executeUpdate(createTableQuery);
             System.out.println("Table 'employee_payroll' created successfully.");
 
-            // Step 2: Insert data into the employee_payroll table
-            String insertDataQuery = "INSERT INTO employee_payroll (name, salary, start_date) "
-                    + "VALUES ('John Doe', 50000.00, '2023-01-01'), "
-                    + "('Jane Smith', 60000.00, '2023-02-01'), "
-                    + "('Alice Johnson', 55000.00, '2023-03-01')";
-
-            int rowsInserted = statement.executeUpdate(insertDataQuery);
-            System.out.println(rowsInserted + " rows inserted into 'employee_payroll'.");
+            // Step 2: Retrieve all data from the employee_payroll table
+            String selectQuery = "SELECT * FROM employee_payroll";
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+            System.out.println("Employee Payroll Data:");
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                double salary = resultSet.getDouble("salary");
+                String startDate = resultSet.getDate("start_date").toString();
+                System.out.println("ID: " + id + ", Name: " + name + ", Salary: " + salary + ", Start Date: " + startDate);
+            }
 
             // Step 3: Verify table creation
             String showTablesQuery = "SHOW TABLES";
-            var resultSet = statement.executeQuery(showTablesQuery);
+            resultSet = statement.executeQuery(showTablesQuery);
             System.out.println("Tables in payroll_service database:");
             while (resultSet.next()) {
                 System.out.println("- " + resultSet.getString(1));
