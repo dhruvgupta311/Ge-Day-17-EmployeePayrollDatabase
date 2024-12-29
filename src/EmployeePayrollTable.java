@@ -1,54 +1,38 @@
-// File: EmployeePayrollTable.java
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.sql.ResultSet;
 
 public class EmployeePayrollTable {
     private static final String URL = "jdbc:mysql://localhost:3306/payroll_service";
     private static final String USER = "root"; // Replace with your MySQL username
     private static final String PASSWORD = "Dhruv@2101041cs"; // Replace with your MySQL password
 
-    public static void main(String[] args) {
+    public static void createTable() {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement statement = connection.createStatement()) {
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS employee_payroll ("
+                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
+                    + "name VARCHAR(100) NOT NULL, "
+                    + "gender VARCHAR(10), "
+                    + "salary DECIMAL(10, 2) NOT NULL, "
+                    + "start_date DATE NOT NULL)";
+            statement.executeUpdate(createTableQuery);
+            System.out.println("Table 'employee_payroll' created successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Step 1: Update Terissa's department to 'Sales and Marketing'
-            String updateDepartmentQuery = "UPDATE employee_payroll SET department = 'Sales and Marketing' WHERE name = 'Terissa'";
-            int departmentRowsUpdated = statement.executeUpdate(updateDepartmentQuery);
-            System.out.println(departmentRowsUpdated + " rows updated for Terissa's department.");
-
-            // Step 2: Update Terissa's salary if necessary (Example: updating salary for both entries of Terissa)
-            String updateSalaryQuery = "UPDATE employee_payroll SET salary = 55000.00 WHERE name = 'Terissa'";
-            int salaryRowsUpdated = statement.executeUpdate(updateSalaryQuery);
-            System.out.println(salaryRowsUpdated + " rows updated for Terissa's salary.");
-
-            // Step 3: Retrieve and display updated employee payroll data
-            String selectQuery = "SELECT * FROM employee_payroll WHERE name = 'Terissa'";
-            ResultSet resultSet = statement.executeQuery(selectQuery);
-            System.out.println("Updated Employee Payroll Data for Terissa:");
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                String gender = resultSet.getString("gender");
-                double salary = resultSet.getDouble("salary");
-                String startDate = resultSet.getDate("start_date").toString();
-                String phone = resultSet.getString("phone");
-                String address = resultSet.getString("address");
-                String department = resultSet.getString("department");
-                double basicPay = resultSet.getDouble("basic_pay");
-                double deductions = resultSet.getDouble("deductions");
-                double taxablePay = resultSet.getDouble("taxable_pay");
-                double incomeTax = resultSet.getDouble("income_tax");
-                double netPay = resultSet.getDouble("net_pay");
-                System.out.println("ID: " + id + ", Name: " + name + ", Gender: " + gender
-                        + ", Salary: " + salary + ", Start Date: " + startDate
-                        + ", Phone: " + phone + ", Address: " + address
-                        + ", Department: " + department + ", Basic Pay: " + basicPay
-                        + ", Deductions: " + deductions + ", Taxable Pay: " + taxablePay
-                        + ", Income Tax: " + incomeTax + ", Net Pay: " + netPay);
-            }
-
+    public static void insertData() {
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement statement = connection.createStatement()) {
+            String insertDataQuery = "INSERT INTO employee_payroll (name, gender, salary, start_date) "
+                    + "VALUES ('John Doe', 'Male', 50000.00, '2023-01-01'), "
+                    + "('Jane Smith', 'Female', 60000.00, '2023-02-01'), "
+                    + "('Alice Johnson', 'Female', 55000.00, '2023-03-01'), "
+                    + "('Bill Gates', 'Male', 100000.00, '2019-05-15')";
+            int rowsInserted = statement.executeUpdate(insertDataQuery);
+            System.out.println(rowsInserted + " rows inserted into 'employee_payroll'.");
         } catch (Exception e) {
             e.printStackTrace();
         }
