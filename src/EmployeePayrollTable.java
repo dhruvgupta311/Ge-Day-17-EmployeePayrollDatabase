@@ -13,7 +13,7 @@ public class EmployeePayrollTable {
              Statement statement = connection.createStatement()) {
 
             // Step 1: Create the employee_payroll table
-            String createTableQuery = "CREATE TABLE employee_payroll ("
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS employee_payroll ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
                     + "name VARCHAR(100) NOT NULL, "
                     + "salary DECIMAL(10, 2) NOT NULL, "
@@ -22,7 +22,16 @@ public class EmployeePayrollTable {
             statement.executeUpdate(createTableQuery);
             System.out.println("Table 'employee_payroll' created successfully.");
 
-            // Step 2: Verify table creation
+            // Step 2: Insert data into the employee_payroll table
+            String insertDataQuery = "INSERT INTO employee_payroll (name, salary, start_date) "
+                    + "VALUES ('John Doe', 50000.00, '2023-01-01'), "
+                    + "('Jane Smith', 60000.00, '2023-02-01'), "
+                    + "('Alice Johnson', 55000.00, '2023-03-01')";
+
+            int rowsInserted = statement.executeUpdate(insertDataQuery);
+            System.out.println(rowsInserted + " rows inserted into 'employee_payroll'.");
+
+            // Step 3: Verify table creation
             String showTablesQuery = "SHOW TABLES";
             var resultSet = statement.executeQuery(showTablesQuery);
             System.out.println("Tables in payroll_service database:");
