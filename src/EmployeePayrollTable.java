@@ -23,7 +23,17 @@ public class EmployeePayrollTable {
             statement.executeUpdate(createTableQuery);
             System.out.println("Table 'employee_payroll' created successfully.");
 
-            // Step 2: Retrieve all data from the employee_payroll table
+            // Step 2: Insert data into the employee_payroll table
+            String insertDataQuery = "INSERT INTO employee_payroll (name, salary, start_date) "
+                    + "VALUES ('John Doe', 50000.00, '2023-01-01'), "
+                    + "('Jane Smith', 60000.00, '2023-02-01'), "
+                    + "('Alice Johnson', 55000.00, '2023-03-01'), "
+                    + "('Bill Gates', 100000.00, '2019-05-15')";
+
+            int rowsInserted = statement.executeUpdate(insertDataQuery);
+            System.out.println(rowsInserted + " rows inserted into 'employee_payroll'.");
+
+            // Step 3: Retrieve all data from the employee_payroll table
             String selectQuery = "SELECT * FROM employee_payroll";
             ResultSet resultSet = statement.executeQuery(selectQuery);
             System.out.println("Employee Payroll Data:");
@@ -35,7 +45,29 @@ public class EmployeePayrollTable {
                 System.out.println("ID: " + id + ", Name: " + name + ", Salary: " + salary + ", Start Date: " + startDate);
             }
 
-            // Step 3: Verify table creation
+            // Step 4: Retrieve salary of a particular employee (Bill)
+            String selectSalaryQuery = "SELECT salary FROM employee_payroll WHERE name = 'Bill Gates'";
+            resultSet = statement.executeQuery(selectSalaryQuery);
+            System.out.println("Salary of Bill Gates:");
+            if (resultSet.next()) {
+                System.out.println("Salary: " + resultSet.getDouble("salary"));
+            } else {
+                System.out.println("Employee not found.");
+            }
+
+            // Step 5: Retrieve employees who joined in a particular date range
+            String selectByDateRangeQuery = "SELECT * FROM employee_payroll WHERE start_date BETWEEN CAST('2018-01-01' AS DATE) AND DATE(NOW())";
+            resultSet = statement.executeQuery(selectByDateRangeQuery);
+            System.out.println("Employees who joined between 2018-01-01 and now:");
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                double salary = resultSet.getDouble("salary");
+                String startDate = resultSet.getDate("start_date").toString();
+                System.out.println("ID: " + id + ", Name: " + name + ", Salary: " + salary + ", Start Date: " + startDate);
+            }
+
+            // Step 6: Verify table creation
             String showTablesQuery = "SHOW TABLES";
             resultSet = statement.executeQuery(showTablesQuery);
             System.out.println("Tables in payroll_service database:");
