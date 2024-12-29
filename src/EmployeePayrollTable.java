@@ -27,16 +27,22 @@ public class EmployeePayrollTable {
                     + "start_date DATE NOT NULL, "
                     + "phone VARCHAR(15), "
                     + "address VARCHAR(255) DEFAULT 'Not Provided', "
-                    + "department VARCHAR(100) NOT NULL)";
+                    + "department VARCHAR(100) NOT NULL, "
+                    + "basic_pay DECIMAL(10, 2), "
+                    + "deductions DECIMAL(10, 2), "
+                    + "taxable_pay DECIMAL(10, 2), "
+                    + "income_tax DECIMAL(10, 2), "
+                    + "net_pay DECIMAL(10, 2)"
+                    + ")";
             statement.executeUpdate(createTableQuery);
             System.out.println("Table 'employee_payroll' created successfully with new fields.");
 
             // Step 3: Insert data into the employee_payroll table with new fields
-            String insertDataQuery = "INSERT INTO employee_payroll (name, gender, salary, start_date, phone, address, department) "
-                    + "VALUES ('John Doe', 'M', 50000.00, '2023-01-01', '123-456-7890', '123 Main St', 'HR'), "
-                    + "('Jane Smith', 'F', 60000.00, '2023-02-01', '987-654-3210', '456 Elm St', 'IT'), "
-                    + "('Alice Johnson', 'F', 55000.00, '2023-03-01', '555-123-4567', '789 Oak St', 'Finance'), "
-                    + "('Bill Gates', 'M', 100000.00, '2019-05-15', '111-222-3333', '101 Maple St', 'Executive')";
+            String insertDataQuery = "INSERT INTO employee_payroll (name, gender, salary, start_date, phone, address, department, basic_pay, deductions, taxable_pay, income_tax, net_pay) "
+                    + "VALUES ('John Doe', 'M', 50000.00, '2023-01-01', '123-456-7890', '123 Main St', 'HR', 45000.00, 5000.00, 40000.00, 5000.00, 35000.00), "
+                    + "('Jane Smith', 'F', 60000.00, '2023-02-01', '987-654-3210', '456 Elm St', 'IT', 55000.00, 4000.00, 51000.00, 6000.00, 45000.00), "
+                    + "('Alice Johnson', 'F', 55000.00, '2023-03-01', '555-123-4567', '789 Oak St', 'Finance', 50000.00, 3000.00, 47000.00, 5500.00, 41500.00), "
+                    + "('Bill Gates', 'M', 100000.00, '2019-05-15', '111-222-3333', '101 Maple St', 'Executive', 95000.00, 8000.00, 87000.00, 12000.00, 75000.00)";
             int rowsInserted = statement.executeUpdate(insertDataQuery);
             System.out.println(rowsInserted + " rows inserted into 'employee_payroll'.");
 
@@ -53,10 +59,17 @@ public class EmployeePayrollTable {
                 String phone = resultSet.getString("phone");
                 String address = resultSet.getString("address");
                 String department = resultSet.getString("department");
+                double basicPay = resultSet.getDouble("basic_pay");
+                double deductions = resultSet.getDouble("deductions");
+                double taxablePay = resultSet.getDouble("taxable_pay");
+                double incomeTax = resultSet.getDouble("income_tax");
+                double netPay = resultSet.getDouble("net_pay");
                 System.out.println("ID: " + id + ", Name: " + name + ", Gender: " + gender
                         + ", Salary: " + salary + ", Start Date: " + startDate
                         + ", Phone: " + phone + ", Address: " + address
-                        + ", Department: " + department);
+                        + ", Department: " + department + ", Basic Pay: " + basicPay
+                        + ", Deductions: " + deductions + ", Taxable Pay: " + taxablePay
+                        + ", Income Tax: " + incomeTax + ", Net Pay: " + netPay);
             }
 
         } catch (Exception e) {
