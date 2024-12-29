@@ -13,43 +13,20 @@ public class EmployeePayrollTable {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement statement = connection.createStatement()) {
 
-            // Step 1: Drop the existing table and create a new one
-            String dropTableQuery = "DROP TABLE IF EXISTS employee_payroll";
-            statement.executeUpdate(dropTableQuery);
-            System.out.println("Existing table 'employee_payroll' dropped.");
+            // Step 1: Update Terissa's department to 'Sales and Marketing'
+            String updateDepartmentQuery = "UPDATE employee_payroll SET department = 'Sales and Marketing' WHERE name = 'Terissa'";
+            int departmentRowsUpdated = statement.executeUpdate(updateDepartmentQuery);
+            System.out.println(departmentRowsUpdated + " rows updated for Terissa's department.");
 
-            // Step 2: Create the employee_payroll table with new fields
-            String createTableQuery = "CREATE TABLE employee_payroll ("
-                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "name VARCHAR(100) NOT NULL, "
-                    + "gender CHAR(1), "
-                    + "salary DECIMAL(10, 2) NOT NULL, "
-                    + "start_date DATE NOT NULL, "
-                    + "phone VARCHAR(15), "
-                    + "address VARCHAR(255) DEFAULT 'Not Provided', "
-                    + "department VARCHAR(100) NOT NULL, "
-                    + "basic_pay DECIMAL(10, 2), "
-                    + "deductions DECIMAL(10, 2), "
-                    + "taxable_pay DECIMAL(10, 2), "
-                    + "income_tax DECIMAL(10, 2), "
-                    + "net_pay DECIMAL(10, 2)"
-                    + ")";
-            statement.executeUpdate(createTableQuery);
-            System.out.println("Table 'employee_payroll' created successfully with new fields.");
+            // Step 2: Update Terissa's salary if necessary (Example: updating salary for both entries of Terissa)
+            String updateSalaryQuery = "UPDATE employee_payroll SET salary = 55000.00 WHERE name = 'Terissa'";
+            int salaryRowsUpdated = statement.executeUpdate(updateSalaryQuery);
+            System.out.println(salaryRowsUpdated + " rows updated for Terissa's salary.");
 
-            // Step 3: Insert data into the employee_payroll table with new fields
-            String insertDataQuery = "INSERT INTO employee_payroll (name, gender, salary, start_date, phone, address, department, basic_pay, deductions, taxable_pay, income_tax, net_pay) "
-                    + "VALUES ('John Doe', 'M', 50000.00, '2023-01-01', '123-456-7890', '123 Main St', 'HR', 45000.00, 5000.00, 40000.00, 5000.00, 35000.00), "
-                    + "('Jane Smith', 'F', 60000.00, '2023-02-01', '987-654-3210', '456 Elm St', 'IT', 55000.00, 4000.00, 51000.00, 6000.00, 45000.00), "
-                    + "('Alice Johnson', 'F', 55000.00, '2023-03-01', '555-123-4567', '789 Oak St', 'Finance', 50000.00, 3000.00, 47000.00, 5500.00, 41500.00), "
-                    + "('Bill Gates', 'M', 100000.00, '2019-05-15', '111-222-3333', '101 Maple St', 'Executive', 95000.00, 8000.00, 87000.00, 12000.00, 75000.00)";
-            int rowsInserted = statement.executeUpdate(insertDataQuery);
-            System.out.println(rowsInserted + " rows inserted into 'employee_payroll'.");
-
-            // Step 4: Retrieve all data from the employee_payroll table
-            String selectQuery = "SELECT * FROM employee_payroll";
+            // Step 3: Retrieve and display updated employee payroll data
+            String selectQuery = "SELECT * FROM employee_payroll WHERE name = 'Terissa'";
             ResultSet resultSet = statement.executeQuery(selectQuery);
-            System.out.println("Employee Payroll Data:");
+            System.out.println("Updated Employee Payroll Data for Terissa:");
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
